@@ -1,16 +1,16 @@
+const GroupList = require("./group-list");
 class Sockets {
   constructor(io) {
     this.io = io;
+    this.groupList = new GroupList();
     this.socketEvents();
   }
   socketEvents() {
     // On connection
     this.io.on("connection", (socket) => {
-      // Listen the event
-      socket.on("client-message", (data) => {
-        console.log(data);
-        this.io.emit("server-message", data);
-      });
+      console.log("New client connected");
+      // Emit all groups to client
+      socket.emit("current-groups", this.groupList.getGroups());
     });
   }
 }
